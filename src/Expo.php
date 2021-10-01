@@ -191,8 +191,22 @@ class Expo
      *
      * @throws ExpoException
      */
-    public function push(): ExpoResponse
+    public function push()
     {
+        // if (is_null($this->message) || is_null($this->recipients)) {
+        //     throw new ExpoException('You must have a message and recipients to push');
+        // }
+
+        // $messages = array_map(function ($recipient) {
+        //     return $this->message->toArray() + ['to' => $recipient];
+        // }, $this->recipients);
+
+        // $this->reset();
+
+        // return $this->client->sendPushNotifications($messages);
+
+        $response = array();
+
         if (is_null($this->message) || is_null($this->recipients)) {
             throw new ExpoException('You must have a message and recipients to push');
         }
@@ -201,10 +215,25 @@ class Expo
             return $this->message->toArray() + ['to' => $recipient];
         }, $this->recipients);
 
+
+        $messagesChunks = array_chunk($messages, 100);
+
         $this->reset();
 
-        return $this->client->sendPushNotifications($messages);
+        foreach ($messagesChunks as $messagesChunk){
+            $res = $this->client->sendPushNotifications($messagesChunk);
+
+            if($res->getData() != null){
+                $arr['status'] = $res->getStatusCode();
+                $arr['data'] = $res->getData();
+
+                $response[] = $arr;
+            }
+        }
+
+        return $response;
     }
+
 
     /**
      * Fetches the push notification receipts from the expo server
