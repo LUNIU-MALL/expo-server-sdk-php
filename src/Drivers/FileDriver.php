@@ -64,26 +64,31 @@ class FileDriver extends Driver
     /**
      * Removes subscriptions from a channel
      */
-    public function forget(string $channel, array $tokens): bool
+    public function forget(string $channel, $tokens = null): bool
     {
         $store = $this->file->read();
         $subs = $store->{$channel} ?? null;
-        $tokens = array_unique($tokens);
 
         if (is_null($subs)) {
             return true;
         }
 
-        $subs = array_filter($subs, function ($token) use ($tokens) {
-            return ! in_array($token, $tokens);
-        });
-
-        // delete channel if there are no more subscriptions
-        if (count($subs) === 0) {
+        if(is_null($tokens)){
             unset($store->{$channel});
-        } else {
-            $store->{$channel} = array_values($subs);
+        }else{
+            $tokens = array_unique($tokens);
+            $subs = array_filter($subs, function ($token) use ($tokens) {
+                return ! in_array($token, $tokens);
+            });
+    
+            // delete channel if there are no more subscriptions
+            if (count($subs) === 0) {
+                unset($store->{$channel});
+            } else {
+                $store->{$channel} = array_values($subs);
+            }
         }
+
 
         return $this->file->write($store);
     }

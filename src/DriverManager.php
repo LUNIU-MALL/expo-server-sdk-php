@@ -112,7 +112,7 @@ class DriverManager
      * @param string|array $tokens
      * @throws InvalidTokensException
      */
-    private function normalizeTokens($tokens): array
+    private function normalizeTokens($tokens)
     {
         if (is_array($tokens) && count($tokens) > 0) {
             return $tokens;
@@ -120,6 +120,10 @@ class DriverManager
 
         if (is_string($tokens)) {
             return [$tokens];
+        }
+
+        if($tokens == null){
+            return null;
         }
 
         throw new InvalidTokensException(
