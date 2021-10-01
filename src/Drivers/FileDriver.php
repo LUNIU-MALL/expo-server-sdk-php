@@ -43,8 +43,9 @@ class FileDriver extends Driver
         $store = $this->file->read();
         $subs = $store->{$channel} ?? null;
 
-        $subs = $subs ? array_merge($subs, $tokens) : $tokens;
-        $store->{$channel} = array_unique($subs);
+        $subs = $subs ? array_values(array_merge($subs, $tokens)) : $tokens;
+        $subs = array_unique($subs);
+        $store->{$channel} = array_values($subs);
 
         return $this->file->write($store);
     }
