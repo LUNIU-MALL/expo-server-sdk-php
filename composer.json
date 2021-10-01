@@ -1,5 +1,5 @@
 {
-    "name": "ctwillie/expo-server-sdk-php",
+    "name": "luniumall/expo-server-sdk-php",
     "description": "Server-side library for working with Expo using PHP",
     "keywords": [
         "expo",
