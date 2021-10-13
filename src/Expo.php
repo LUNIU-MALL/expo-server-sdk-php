@@ -221,7 +221,7 @@ class Expo
         $this->reset();
 
         foreach ($messagesChunks as $messagesChunk){
-            $res = $this->client->sendPushNotifications($messagesChunk);
+            $res = $this->client->sendPushNotificationsWithoutError($messagesChunk);
 
             if($res->getData() != null){
                 $arr['status'] = $res->getStatusCode();

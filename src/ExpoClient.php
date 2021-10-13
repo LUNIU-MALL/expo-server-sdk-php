@@ -78,6 +78,26 @@ class ExpoClient
         return new ExpoResponse($response);
     }
 
+    public function sendPushNotificationsWithoutError(array $messages): ExpoResponse
+    {
+        $actualMessageCount = $this->getActualMessageCount($messages);
+        [$compressed, $body] = $this->compressBody($messages);
+        $headers = $this->getDefaultHeaders();
+
+        if ($compressed) {
+            $headers['Content-Encoding'] = 'gzip';
+        }
+
+        $response = $this->client->post(self::EXPO_BASE_URL . '/push/send', [
+            'verify' => false,
+            'http_errors' => false,
+            'headers' => $headers,
+            'body' => $body,
+        ]);
+
+        return new ExpoResponse($response);
+    }
+
     /**
      * Retrieves push notification receipts from the Expo api
      *
