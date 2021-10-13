@@ -99,6 +99,14 @@ class DriverManager
     }
 
     /**
+     * Unsubscribes all tokens
+     */
+    public function unsubscribeAll(): bool
+    {
+        return $this->driver->forgetAll();
+    }
+
+    /**
      * Normalizes the channel name
      */
     private function normalizeChannel(string $channel): string

@@ -93,4 +93,9 @@ class FileDriver extends Driver
 
         return $this->file->write($store);
     }
+
+    public function forgetAll(): bool
+    {
+        return $this->file->write((object)[]);
+    }
 }

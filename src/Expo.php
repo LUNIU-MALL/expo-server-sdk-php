@@ -81,6 +81,21 @@ class Expo
     }
 
     /**
+     * Unsubscribes all tokens 
+     *
+     * @return mixed
+     * @throws ExpoException
+    */
+    public function unsubscribeAll()
+    {
+        if ($this->manager) {
+            return $this->manager->unsubscribeAll();
+        }
+
+        throw new ExpoException('You must provide a driver to interact with subscriptions.');
+    }
+
+    /**
      * Set the recipients from channel subscriptions to send the message to
      */
     public function toChannel(string $channel): self

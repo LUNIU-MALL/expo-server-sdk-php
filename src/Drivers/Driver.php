@@ -25,4 +25,9 @@ abstract class Driver
      * Removes subscriptions from a channels
      */
     abstract public function forget(string $channel, $tokens): bool;
+
+    /**
+     * Removes all subscriptions
+     */
+    abstract public function forgetAll(): bool;
 }
