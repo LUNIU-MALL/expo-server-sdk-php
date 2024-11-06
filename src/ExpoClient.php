@@ -22,9 +22,9 @@ class ExpoClient
     /** @var ExpoErrorManager */
     private $errors;
 
-    public function __construct()
+    public function __construct(array $options = [])
     {
-        $this->client = new Client();
+        $this->client = new Client($options);
 
         $this->errors = new ExpoErrorManager();
     }
@@ -43,7 +43,6 @@ class ExpoClient
         }
 
         $response = $this->client->post(self::EXPO_BASE_URL . '/push/send', [
-            'verify' => false,
             'http_errors' => false,
             'headers' => $headers,
             'body' => $body,
@@ -116,7 +115,6 @@ class ExpoClient
         }
 
         $response = $this->client->post(self::EXPO_BASE_URL . '/push/getReceipts', [
-            'verify' => false,
             'http_errors' => false,
             'headers' => $headers,
             'body' => $body,
@@ -188,6 +186,13 @@ class ExpoClient
      */
     private function getActualMessageCount(array $messages): int
     {
-        return count($messages);
+        $count = 0;
+
+        foreach ($messages as $message) {
+            $recipients = Utils::arrayWrap($message['to']);
+            $count += count($recipients);
+        }
+
+        return $count;
     }
 }
